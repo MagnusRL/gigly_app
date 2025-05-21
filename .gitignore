@@ -27,8 +27,7 @@ media/
 # macOS
 .DS_Store
 
-# uv environment files (if any specific)
-uv.lock
+
 
 # PyCharm
 .idea/
