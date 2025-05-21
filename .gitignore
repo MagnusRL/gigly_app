@@ -1,0 +1,56 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment folder
+.venv/
+venv/
+env/
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+db.sqlite3
+/staticfiles/
+media/
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# uv environment files (if any specific)
+uv.lock
+
+# PyCharm
+.idea/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# local settings (if you have local settings file)
+local_settings.py
+
