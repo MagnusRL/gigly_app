@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up | Gigly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Link to CSS (optional) -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container" style="max-width: 400px; margin: auto; padding-top: 100px;">
+        <h2>Create Account</h2>
+        {% if form.errors %}
+            <div style="color: red;">
+                <p>Please correct the errors below.</p>
+            </div>
+        {% endif %}
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            <div style="margin-bottom: 10px;">
+                <label for="id_username">Username:</label>
+                {{ form.username }}
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label for="id_password1">Password:</label>
+                {{ form.password1 }}
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label for="id_password2">Confirm Password:</label>
+                {{ form.password2 }}
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p style="margin-top: 20px;">
+            Already have an account? <a href="{% url 'login' %}">Log in</a>
+        </p>
+    </div>
+</body>
+</html>

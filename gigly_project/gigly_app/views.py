@@ -1,11 +1,20 @@
 # Create your views here.
 from django.shortcuts import render, HttpResponse
 
-def home(request):
-    return render(request, 'index.html', {"active_page": "home"})
+def index(request):
+    return render(request, 'index.html')
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
 
 def discover(request):
-    return render(request, 'discover.html', {"active_page": "discover"})
+    return render(request, 'discover.html')
 
 def profile(request):
-    return render(request, 'profile.html', {"active_page": "profile"})
+    return render(request, 'profile.html')
+
+def login(request):
+    return render(request, 'login.html')
+
+def signup(request):
+    return render(request, 'signup.html')
