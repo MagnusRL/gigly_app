@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-e$8me!76nxyv32-$%b^zp&0xd)@5p@m%b#))yk^v*&c*ik-&9a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.112']
 
 
 # Application definition
@@ -130,3 +130,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Authorization settings
 AUTH_USER_MODEL = 'gigly_app.User'  # Use the custom user model
+
+# Redirect URL after login
+LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to the dashboard after login
+# Redirect URL after logout
+LOGOUT_REDIRECT_URL = 'login'  # Redirect to the login page after logout
+# Redirect URL after signup
+SIGNUP_REDIRECT_URL = 'dashboard'  # Redirect to the dashboard after signup
