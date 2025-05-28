@@ -28,6 +28,7 @@ class User(AbstractUser):
     username = None  # Disable username
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
+    age = models.PositiveIntegerField(null=True, blank=True)
     is_buyer = models.BooleanField(default=False)
     is_seller = models.BooleanField(default=False)
     bio = models.TextField(blank=True, null=True)

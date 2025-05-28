@@ -1,3 +1,39 @@
 {% extends 'base.html' %}
 
-{% block title %}Welcome to the Dashboard {% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Main content -->
+  <div class="col-md-8">
+    <header class="mb-4">
+      <h1>Welcome to your Dashboard, {{ user.name|default:user.email }}!</h1>
+      <p class="lead">Manage your profile, view activity, and access features here.</p>
+    </header>
+
+    <!-- Your main dashboard content here -->
+    <p>Here you can manage your profile, view your activity, and access various features of the application.</p>
+  </div>
+
+  <!-- Right sidebar -->
+  <div class="col-md-4">
+    <a href="{% url 'create_task' %}">
+        <button>Create Task</button>
+    </a>    
+    <h5>Your Tasks</h5>
+    <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+      {% if tasks %}
+        <ul class="list-group">
+          {% for task in tasks %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ task.title }}
+              <span class="badge bg-primary rounded-pill">${{ task.price }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-muted">No tasks found.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

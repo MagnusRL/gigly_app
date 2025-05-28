@@ -1,15 +1,23 @@
-# Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, TaskForm
+from django.contrib.auth.decorators import login_required
+from .models import Task
+from django.http import HttpResponseForbidden
+
 
 def index(request):
     return render(request, 'index.html')
 
+
+@login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    tasks = Task.objects.filter(buyer=request.user).order_by('-created_at')
+    return render(request, 'dashboard.html', {
+        "user": request.user,
+        "tasks": tasks,
+    })
 
 def discover(request):
     return render(request, 'discover.html')
@@ -27,8 +35,17 @@ def signup_view(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            auth_login(request, user)  # use auth_login here
+            user = form.save(commit=False)
+            age = form.cleaned_data.get('age')
+            user.age = age
+
+            if age < 18:
+                user.is_buyer = True
+            else:
+                user.is_seller = True
+
+            user.save()
+            auth_login(request, user)
             return redirect("dashboard")
     else:
         form = CustomUserCreationForm()
@@ -39,8 +56,25 @@ def login_view(request):
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            auth_login(request, user)  # use auth_login here
+            auth_login(request, user)
             return redirect("dashboard")
     else:
         form = CustomAuthenticationForm()
     return render(request, "login.html", {"form": form})
+
+@login_required
+def create_task(request):
+    if not request.user.is_buyer:
+        return HttpResponseForbidden("Only buyers can create tasks.")
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.buyer = request.user
+            task.save()
+            return redirect('dashboard')
+    else:
+        form = TaskForm()
+
+    return render(request, 'createtask.html', {'form': form})
