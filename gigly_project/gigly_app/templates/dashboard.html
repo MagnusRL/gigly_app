@@ -6,19 +6,24 @@
   <!-- Main content -->
   <div class="col-md-8">
     <header class="mb-4">
-      <h1>Welcome to your Dashboard, {{ user.name|default:user.email }}!</h1>
-      <p class="lead">Manage your profile, view activity, and access features here.</p>
+      <h1>Dashboard</h1>
+      <p class="lead">View activity and access features here.</p>
     </header>
 
     <!-- Your main dashboard content here -->
-    <p>Here you can manage your profile, view your activity, and access various features of the application.</p>
+ 
+    <a href="{% url 'discover' %}" class="btn btn-primary me-3">Discover Tasks</a>
+    <a href="{% url 'createtask' %}" class="btn btn-primary">Create Task</a>
+
+
+    <div class="mt-4">
+      <h2>Your Activity</h2>
+
+    </div>
   </div>
 
   <!-- Right sidebar -->
-  <div class="col-md-4">
-    <a href="{% url 'create_task' %}">
-        <button>Create Task</button>
-    </a>    
+  <div class="col-md-4">  
     <h5>Your Tasks</h5>
     <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
       {% if tasks %}

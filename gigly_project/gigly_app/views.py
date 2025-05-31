@@ -78,3 +78,8 @@ def create_task(request):
         form = TaskForm()
 
     return render(request, 'createtask.html', {'form': form})
+
+@login_required
+def chat(request):
+    # Placeholder for message functionality
+    return render(request, 'chat.html', {"user": request.user})

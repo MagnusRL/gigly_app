@@ -63,12 +63,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'gigly_project.wsgi.application'
+# ASGI application for Channels
+ASGI_APPLICATION = 'gigly_project.asgi.application'
 
 
 # Database
@@ -138,3 +141,12 @@ LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to the dashboard after login
 LOGOUT_REDIRECT_URL = 'login'  # Redirect to the login page after logout
 # Redirect URL after signup
 SIGNUP_REDIRECT_URL = 'dashboard'  # Redirect to the dashboard after signup
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

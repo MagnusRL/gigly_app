@@ -5,41 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Gigly{% endblock %}</title>
 
-    <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     {% block extra_css %}{% endblock %}
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'dashboard' %}">Gigly</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'discover' %}active{% endif %}" href="{% url 'discover' %}">Discover</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
-                    </li>
-                </ul>
-            </div>
+<body>
+    {% load string_filters %}
+
+    <style>
+    .nav-link.active {
+        font-weight: 700;
+        color: black;
+    }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container"> <a class="navbar-brand">Gigly</a>
+      
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav"> <li class="nav-item">
+                <a class="nav-link {% if request.path|startswith:'/discover' %}active{% endif %}" href="{% url 'discover' %}">Discover</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.path == '/' or request.path|startswith:'/dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.path|startswith:'/profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
+              </li>
+              <li>
+                <a class="nav-link {% if request.path|startswith:'/chat' %}active{% endif %}" href="{% url 'chat' %}">Chat</a>
+              </li>
+            </ul>
+          </div>
         </div>
     </nav>
-
+    
     <div class="container py-4">
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Bootstrap JS Bundle CDN (Popper + Bootstrap JS) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     {% block extra_js %}{% endblock %}
