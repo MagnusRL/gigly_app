@@ -12,6 +12,7 @@ env/
 *.egg-info/
 dist/
 build/
+__pycache__/
 
 # Django stuff:
 *.log

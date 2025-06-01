@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.112']
 # Application definition
 
 INSTALLED_APPS = [
-    'gigly_app',
+    'core_app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,7 +133,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Authorization settings
-AUTH_USER_MODEL = 'gigly_app.User'  # Use the custom user model
+AUTH_USER_MODEL = 'core_app.User'  # Use the custom user model
 
 # Redirect URL after login
 LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to the dashboard after login

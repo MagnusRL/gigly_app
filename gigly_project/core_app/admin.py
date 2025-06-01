@@ -7,8 +7,8 @@ from django.urls import reverse
 
 class UserAdmin(BaseUserAdmin):
     ordering = ['email']
-    #list_display = ['email', 'name', 'is_buyer',]
-    list_display = ['email', 'name', 'is_buyer', 'is_seller', 'is_staff', 'is_superuser']
+    list_display = ['email', 'name', 'is_buyer',]
+    #list_display = ['email', 'name', 'is_buyer', 'is_seller', 'is_staff', 'is_superuser']
     search_fields = ['email', 'name']
 
     fieldsets = (
