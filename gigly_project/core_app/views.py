@@ -8,28 +8,23 @@ from django.http import HttpResponseForbidden
 
 
 def index(request):
-    return render(request, 'index.html')
-
+    return render(request, 'core_app/index.html', {
+        'show_navbar': False,
+    })
 
 @login_required
 def dashboard(request):
     tasks = Task.objects.filter(buyer=request.user).order_by('-created_at')
-    return render(request, 'dashboard.html', {
+    return render(request, 'core_app/dashboard.html', {
         "user": request.user,
         "tasks": tasks,
     })
 
 def discover(request):
-    return render(request, 'discover.html')
+    return render(request, 'core_app/discover.html')
 
 def profile(request):
-    return render(request, 'profile.html')
-
-def login_page(request):
-    return render(request, 'login.html')
-
-def signup_page(request):
-    return render(request, 'signup.html')
+    return render(request, 'core_app/profile.html')
 
 def signup_view(request):
     if request.method == "POST":
@@ -49,7 +44,10 @@ def signup_view(request):
             return redirect("dashboard")
     else:
         form = CustomUserCreationForm()
-    return render(request, "signup.html", {"form": form})
+    return render(request, "core_app/signup.html", {
+        "form": form,
+        "show_navbar": False,
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -60,7 +58,12 @@ def login_view(request):
             return redirect("dashboard")
     else:
         form = CustomAuthenticationForm()
-    return render(request, "login.html", {"form": form})
+    context = {
+        "form": form,
+        "show_navbar": False,
+    }
+    print(context)
+    return render(request, "core_app/login.html", context)
 
 @login_required
 def create_task(request):
@@ -77,9 +80,4 @@ def create_task(request):
     else:
         form = TaskForm()
 
-    return render(request, 'createtask.html', {'form': form})
-
-@login_required
-def chat(request):
-    # Placeholder for message functionality
-    return render(request, 'chat.html', {"user": request.user})
+    return render(request, 'core_app/createtask.html', {'form': form})

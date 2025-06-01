@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg bg-light" style="height: 45rem;">
+        <!-- Online Header -->
+        <div class="card-header bg-primary text-white text-center sticky-top">
+            <strong><span id="online-count">3</span> online</strong>
+        </div>
+
+        <!-- Chat Body -->
+        <div class="card-body overflow-auto d-flex flex-column" id="chat_container">
+            <ul id="chat_messages" class="list-unstyled flex-grow-1 d-flex flex-column justify-end">
+                {% for message in chat_messages %}
+                {% if message.author == user %}
+                    <!-- User message -->
+                    <li class="d-flex justify-content-end mb-3 position-relative">
+                        <div class="position-relative message-right bg-success text-white rounded py-2 px-3" style="max-width: 75%;">
+                            {{ message.body }}
+                        </div>
+                    </li>
+                {% else %}
+                    <!-- Other's message -->
+                    <li class="mb-3 position-relative">
+                        <div class="d-flex align-items-end">
+                            <div class="position-relative message-left bg-white text-dark rounded py-2 px-3" style="max-width: 75%;">
+                                {{ message.body }}
+                            </div>
+                        </div>
+                        <small class="text-muted ms-5">
+                            {{ message.author.profile.name }} @{{ message.author.user }}
+                        </small>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="card-footer bg-light sticky-bottom">
+            <form id="chat_message_form" method="POST" class="d-flex w-100">
+                {% csrf_token %}
+                {{ form.body }}
+                <button type="submit" class="btn btn-primary ms-2">Send</button>
+            </form>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
