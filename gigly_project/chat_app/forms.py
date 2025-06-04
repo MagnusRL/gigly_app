@@ -1,10 +1,10 @@
 from django.forms import ModelForm
 from django import forms
-from .models import GroupMessage, ChatGroup
+from .models import ChatMessage, ChatGroup
 
 class ChatmessageCreateForm(ModelForm):
     class Meta:
-        model = GroupMessage
+        model = ChatMessage
         fields = ['body']
         widgets = {
         'body': forms.TextInput(attrs={

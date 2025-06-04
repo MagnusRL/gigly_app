@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <small class="text-muted ms-5">
-                            {{ message.author.profile.name }} @{{ message.author.user }}
+                            @{{ message.author.name }}
                         </small>
                     </li>
                 {% endif %}
@@ -46,4 +46,38 @@
         
     </div>
 </div>
+<div class="col-md-3 bg-light border-end">
+    <div class="list-group list-group-flush overflow-auto" style="height: 100%;">
+        {% for g in user_groups %}
+            <a href="{% url 'chat' group_name=g.group_name %}"
+               class="list-group-item list-group-item-action {% if g == chat_group %}active{% endif %}">
+               {{ g.group_name }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    // --- START OF JAVASCRIPT FOR AUTO-SCROLL ---
+    /**
+     * Scrolls the chat container to its very bottom.
+     * This ensures the latest messages are always in view when the page loads.
+     */
+    function scrollToBottom() {
+        const chatContainer = document.getElementById('chat_container');
+        // Check if the chat container element exists before attempting to scroll
+        if (chatContainer) {
+            // Set the scrollTop property to the total scrollable height
+            // This effectively scrolls the content to the very end.
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }
+
+    // Attach the scrollToBottom function to the window's load event.
+    // This makes sure the chat scrolls to the bottom every time the page loads.
+    // This is crucial for forms that trigger a full page reload upon submission.
+    window.onload = scrollToBottom;
+    // --- END OF JAVASCRIPT FOR AUTO-SCROLL ---
+</script>
+
 {% endblock %}
