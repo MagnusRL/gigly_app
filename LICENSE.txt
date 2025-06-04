@@ -1,0 +1,7 @@
+Copyright (c) 2025 Magnus. All rights reserved.
+
+This code is proprietary and confidential. No permission is granted to copy, distribute, modify, sublicense, or use this code, in whole or in part, without explicit written permission from the copyright holder.
+
+You may view this repository for personal, non-commercial reference only.
+
+Unauthorized use may be subject to legal action.
