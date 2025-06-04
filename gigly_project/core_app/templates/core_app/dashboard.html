@@ -1,28 +1,21 @@
 {% extends 'base.html' %}
-
-
 {% block content %}
-<div class="row">
-  <!-- Main content -->
+<div class="row px-3 py-4">  {# Added px-3 and py-4 here for padding #}
   <div class="col-md-8">
     <header class="mb-4">
       <h1>Dashboard</h1>
       <p class="lead">View activity and access features here.</p>
     </header>
-
-    <!-- Your main dashboard content here -->
- 
     <a href="{% url 'discover' %}" class="btn btn-primary me-3">Discover Tasks</a>
     <a href="{% url 'createtask' %}" class="btn btn-primary">Create Task</a>
-
-
     <div class="mt-4">
       <h2>Your Activity</h2>
-
+      <form class="d-flex" method="GET" action="{% url 'dashboard' %}">
+        <input class="form-control me-2" type="search" placeholder="Search tasks by title" aria-label="Search" name="q">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
     </div>
   </div>
-
-  <!-- Right sidebar -->
   <div class="col-md-4">  
     <h5>Your Tasks</h5>
     <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">

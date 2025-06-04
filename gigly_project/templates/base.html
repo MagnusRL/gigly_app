@@ -8,51 +8,78 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     {% block extra_css %}{% endblock %}
+
+    <style>
+        /* Essential for full-height layouts */
+        html, body {
+            height: 100%; /* Make html and body take full viewport height */
+            margin: 0;   /* Remove default body margin */
+            padding: 0;  /* Remove default body padding */
+            overflow: hidden; /* Prevent scrolling on the body */
+        }
+        /* Custom Navbar styling */
+        .nav-link.active {
+            font-weight: 700;
+            color: black;
+        }
+        /* Flex container for the whole page content below navbar */
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - var(--navbar-height, 56px)); /* Adjust 56px if your navbar height is different */
+            /* You might need to inspect your navbar to get its exact height */
+        }
+    </style>
 </head>
 
 <body>
     {% load string_filters %}
 
-    <style>
-    .nav-link.active {
-        font-weight: 700;
-        color: black;
-    }
-    </style>
-
     {% if show_navbar and not request.path == '/login/' %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <div class="container"> <a class="navbar-brand">Gigly</a>
-      
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" id="mainNavbar"> {# Added an ID here to get its height if needed by JS #}
+        <div class="container"> 
+            <a class="navbar-brand">Gigly</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
+            </button>
 
-          <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav"> <li class="nav-item">
-                <a class="nav-link {% if request.path|startswith:'/discover' %}active{% endif %}" href="{% url 'discover' %}">Discover</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if request.path == '/' or request.path|startswith:'/dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if request.path|startswith:'/profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
-              </li>
-              <li>
-                <a class="nav-link {% if request.path|startswith:'/chat' %}active{% endif %}" href="{% url 'chat' %}">Chat</a>
-              </li>
-            </ul>
-          </div>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav"> 
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path|startswith:'/discover' %}active{% endif %}" href="{% url 'discover' %}">Discover</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' or request.path|startswith:'/dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path|startswith:'/profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li>
+                        <a class="nav-link {% if request.path|startswith:'/chat' %}active{% endif %}" href="{% url 'chat' %}">Chat</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     {% endif %}
     
-    <div class="container py-4">
+    {# This is the new wrapper for your content blocks #}
+    <div class="main-content-wrapper">
         {% block content %}{% endblock %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Optional: Dynamically calculate navbar height if it changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.getElementById('mainNavbar');
+            if (navbar) {
+                document.documentElement.style.setProperty('--navbar-height', `${navbar.offsetHeight}px`);
+            }
+        });
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

@@ -1,83 +1,139 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container my-5">
-    <div class="card shadow-lg bg-light" style="height: 45rem;">
-        <!-- Online Header -->
-        <div class="card-header bg-primary text-white text-center sticky-top">
-            <strong><span id="online-count">3</span> online</strong>
-        </div>
-
-        <!-- Chat Body -->
-        <div class="card-body overflow-auto d-flex flex-column" id="chat_container">
-            <ul id="chat_messages" class="list-unstyled flex-grow-1 d-flex flex-column justify-end">
-                {% for message in chat_messages %}
-                {% if message.author == user %}
-                    <!-- User message -->
-                    <li class="d-flex justify-content-end mb-3 position-relative">
-                        <div class="position-relative message-right bg-success text-white rounded py-2 px-3" style="max-width: 75%;">
-                            {{ message.body }}
-                        </div>
-                    </li>
-                {% else %}
-                    <!-- Other's message -->
-                    <li class="mb-3 position-relative">
-                        <div class="d-flex align-items-end">
-                            <div class="position-relative message-left bg-white text-dark rounded py-2 px-3" style="max-width: 75%;">
-                                {{ message.body }}
-                            </div>
-                        </div>
-                        <small class="text-muted ms-5">
-                            @{{ message.author.name }}
-                        </small>
-                    </li>
-                {% endif %}
+<div class="d-flex w-100 h-100 p-1">
+    
+    <div class="bg-light p-3 border-end rounded-start d-flex flex-column" style="width: 250px; height: 100%;">
+        <h5 class="mb-3">Chat Groups</h5>
+        <div class="list-group flex-grow-1 overflow-auto"> 
+            {% for g in user_groups %}
+                <a href="{% url 'chat' group_name=g.group_name %}" class="list-group-item list-group-item-action {% if g == chat_group %}active{% endif %}">
+                    {{ g.group_name }}
+                </a>
             {% endfor %}
-            </ul>
         </div>
+        <div class="mt-3">
+            <button class="btn btn-primary w-100" id="createGroupButton">Create New Group</button>
+        </div>
+    </div>
 
-        <!-- Chat Input -->
-        <div class="card-footer bg-light sticky-bottom">
-            <form id="chat_message_form" method="POST" class="d-flex w-100">
-                {% csrf_token %}
-                {{ form.body }}
-                <button type="submit" class="btn btn-primary ms-2">Send</button>
-            </form>
-        </div>
-        
+    <div class="flex-grow-1 d-flex flex-column ms-1">
+        {% if not chat_group %}
+            <div class="flex-grow-1 d-flex justify-content-center align-items-center bg-white rounded-end">
+                <div class="text-center">
+                    <h4>No groups yet</h4>
+                    <p>Create a new group to start chatting.</p>
+                    <button class="btn btn-primary" id="createGroupButton">Create Group</button>
+                </div>
+            </div>
+        {% else %}
+            <div class="card shadow-lg bg-light flex-grow-1 d-flex flex-column rounded-end">
+                <div class="card-header bg-primary text-white text-center py-2"> 
+                    <strong><span id="online-count">3</span> online</strong>
+                </div>
+                <div class="card-body overflow-auto d-flex flex-column-reverse p-3 flex-grow-1" id="chat_container" style="height: calc(100vh - 200px);">
+                    <ul id="chat_messages" class="list-unstyled flex-grow-1 mb-0"> 
+                        {% for message in chat_messages %}
+                            {% if message.author == user %}
+                                <li class="d-flex justify-content-end mb-3 position-relative">
+                                    <div class="message-right bg-success text-white rounded py-2 px-3" style="max-width: 75%;">
+                                        {{ message.body }}
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li class="mb-3 position-relative">
+                                    <div class="d-flex align-items-end">
+                                        <div class="message-left bg-white text-dark rounded py-2 px-3" style="max-width: 75%;">
+                                            {{ message.body }}
+                                        </div>
+                                    </div>
+                                    <small class="text-muted ms-5">@{{ message.author.name }}</small>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer bg-light py-3" style="position: sticky; bottom: 0;">
+                    <form id="chat_message_form" method="POST" class="d-flex w-100">
+                        {% csrf_token %}
+                        <input type="text" name="{{ form.body.name }}" class="form-control flex-grow-1" placeholder="Type your message..." {% if form.body.value %}value="{{ form.body.value }}"{% endif %}>
+                        <button type="submit" class="btn btn-primary ms-2">Send</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
-<div class="col-md-3 bg-light border-end">
-    <div class="list-group list-group-flush overflow-auto" style="height: 100%;">
-        {% for g in user_groups %}
-            <a href="{% url 'chat' group_name=g.group_name %}"
-               class="list-group-item list-group-item-action {% if g == chat_group %}active{% endif %}">
-               {{ g.group_name }}
-            </a>
-        {% endfor %}
-    </div>
+
+{# Create Group Modal - Shown on button click #}
+<div id="createGroupModal" class="modal" tabindex="-1" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1050; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <h5>Create New Group</h5>
+    <form id="createGroupForm">
+        <div class="mb-3">
+            <label for="groupName" class="form-label">Group Name</label>
+            <input type="text" id="groupName" name="groupName" class="form-control" placeholder="Enter group name" required>
+        </div>
+        <div class="mb-3">
+            <label for="groupUsers" class="form-label">Add Users</label>
+            <input type="text" id="groupUsers" name="groupUsers" class="form-control" placeholder="Enter usernames separated by commas" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Group</button>
+        <button type="button" class="btn btn-secondary" id="closeModalButton">Cancel</button>
+    </form>
 </div>
 
 <script>
-    // --- START OF JAVASCRIPT FOR AUTO-SCROLL ---
-    /**
-     * Scrolls the chat container to its very bottom.
-     * This ensures the latest messages are always in view when the page loads.
-     */
-    function scrollToBottom() {
-        const chatContainer = document.getElementById('chat_container');
-        // Check if the chat container element exists before attempting to scroll
-        if (chatContainer) {
-            // Set the scrollTop property to the total scrollable height
-            // This effectively scrolls the content to the very end.
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-    }
+    const createGroupButton = document.querySelectorAll('#createGroupButton');
+    const createGroupModal = document.getElementById('createGroupModal');
+    const closeModalButton = document.getElementById('closeModalButton');
 
-    // Attach the scrollToBottom function to the window's load event.
-    // This makes sure the chat scrolls to the bottom every time the page loads.
-    // This is crucial for forms that trigger a full page reload upon submission.
-    window.onload = scrollToBottom;
-    // --- END OF JAVASCRIPT FOR AUTO-SCROLL ---
+    createGroupButton.forEach(btn => {
+        btn.addEventListener('click', () => {
+            createGroupModal.style.display = 'block';
+        });
+    });
+
+    closeModalButton.addEventListener('click', () => {
+        createGroupModal.style.display = 'none';
+    });
+
+    document.getElementById('createGroupForm').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const groupName = document.getElementById('groupName').value;
+    const groupUsers = document.getElementById('groupUsers').value;
+
+    try {
+        const response = await fetch('/create-group/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token for security
+            },
+            body: JSON.stringify({ groupName, groupUsers }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log('Group created:', data);
+            createGroupModal.style.display = 'none'; // Close the modal
+            window.location.href = `/chat/${data.group_name}/`; // Redirect to the new group
+        } else {
+            console.error('Failed to create group:', data.error);
+            alert(`Error: ${data.error}`); // Display error message to the user
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An unexpected error occurred.');
+    }
+});
+
+    // Optional: Scroll to the bottom of the chat container when new messages are added
+    const chatContainer = document.getElementById('chat_container');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    // Example: Update online count dynamically (you can replace this with actual logic)
+    document.getElementById('online-count').textContent = '{{ online_count }}';
 </script>
 
 {% endblock %}

@@ -1,16 +1,18 @@
-"""
-ASGI config for gigly_project project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.2/howto/deployment/asgi/
-"""
-
 import os
-
+import django
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
 from django.core.asgi import get_asgi_application
+import chat_app.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gigly_project.settings')
+django.setup()
 
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            chat_app.routing.websocket_urlpatterns
+        )
+    ),
+})
